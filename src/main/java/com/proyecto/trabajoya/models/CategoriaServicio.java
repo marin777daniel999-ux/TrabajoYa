@@ -17,7 +17,8 @@ public class CategoriaServicio {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id_categoria_servicio")
     private int idCategoriaServicio;
-
+    
+    //Para manejar mejor los repositorios, le puse un código aquí y en los demas modelos que lo debian llevar
     @Column (nullable = false, length = 6)
     private String codigo;
 

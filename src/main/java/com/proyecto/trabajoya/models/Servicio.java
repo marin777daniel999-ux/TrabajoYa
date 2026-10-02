@@ -190,5 +190,4 @@ public class Servicio {
     public void setContrato(List<Contrato> contrato) {
         this.contrato = contrato;
     }
-
 }

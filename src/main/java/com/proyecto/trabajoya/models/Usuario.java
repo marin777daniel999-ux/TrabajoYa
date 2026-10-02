@@ -157,8 +157,4 @@ public class Usuario {
     public void setContrato(List<Contrato> contrato) {
         this.contrato = contrato;
     }
-
-    
-
-    
 }

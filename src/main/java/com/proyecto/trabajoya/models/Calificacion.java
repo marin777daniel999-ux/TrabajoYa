@@ -150,5 +150,4 @@ public class Calificacion {
     public void setContrato(Contrato contrato) {
         this.contrato = contrato;
     }
-    
 }

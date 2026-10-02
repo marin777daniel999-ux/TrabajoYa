@@ -173,6 +173,4 @@ public class Contrato {
     public void setCalificacion(Calificacion calificacion) {
         this.calificacion = calificacion;
     }
-
-    
 }
