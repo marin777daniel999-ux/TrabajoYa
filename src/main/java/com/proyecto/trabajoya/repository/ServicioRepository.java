@@ -8,4 +8,5 @@ public interface ServicioRepository extends JpaRepository<Servicio, Integer>{
     
     Servicio findByCodigo(String codigo);
     List<Servicio> findByContratoIdContrato(Integer idContrato);
+    List<Servicio> findByUsuarioIdUsuario(Integer idUsuario);
 }
