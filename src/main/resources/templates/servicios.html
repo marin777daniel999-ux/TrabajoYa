@@ -1,10 +1,58 @@
-<!DOCTYPE html>
-<html xmlns="http://www.thymeleaf.org" lang="en">
-<head th:replace="~{components/encabezado::encabezado}">
-</head>
-<body>
-    <h1> servicios...</h1>
+    <!DOCTYPE html>
+    <html xmlns="http://www.thymeleaf.org" lang="en">
+    <head th:replace="~{components/encabezado::encabezado}">
+    </head>
+    <body>
+        <header th:replace="~{components/header :: header}"></header>
+        <section>
+            <div class="contenedor">
+                <article>
+                    <h1>Gestion de Servicios</h1>
+                    <form>
+                        <div class="grupo-campo">
+                            <label>codigo</label>
+                            <input type="text"> 
+                        </div>
 
-    <footer th:replace="~{components/footer :: footer}"></footer>
-</body>
-</html>
+                        <div class="grupo-campo">
+                            <label>nombre</label>
+                            <input type="text"> 
+                        </div>
+
+                        <div class="grupo-campo">
+                            <label>descripcion</label>
+                            <input type="text" rows="4"> 
+                        </div>
+
+                        <div class="grupo-campo">
+                            <label>experiencia</label>
+                            <div style="display: flex; gap: 15px; align-items: center; justify-content: space-between; margin-top: 8px; max-width: 600px;">
+                                <div style="text-align: center;" th:each="i : ${#numbers.sequence(1, 10)}">
+                                <span style="display: block; font-size: 13px; font-weight: bold; margin-bottom: 4px;" th:text="${i}"></span>
+                                <input type="radio"/>
+                            </div>
+                        </div>
+                        </div>
+
+                        <div class="grupo-campo">
+                            <label>precio inicial</label>
+                            <input type="text" placeholder="$"> 
+                        </div>
+
+                        <div class="grupo-campo">
+                            <label>Categoria</label>
+                            <input type="text"> 
+                        </div>
+
+                        <div th:replace="~{components/botones :: botones}"></div>
+                        <form action="list/listaServicios.html" method="get">
+    <button type="submit" class="btn-crud btn-listar">Listar</button>
+</form>
+                    </form>
+                </article>
+            </div>
+        </section>
+
+        <footer th:replace="~{components/footer :: footer}"></footer>
+    </body>
+    </html>

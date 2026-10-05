@@ -11,11 +11,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import com.proyecto.trabajoya.models.Usuario;
-import com.proyecto.trabajoya.services.Interfaces.IContratoService;
-import com.proyecto.trabajoya.services.Interfaces.IServicioService;
 import com.proyecto.trabajoya.services.Interfaces.IUsuarioService;
-import com.proyecto.trabajoya.services.Interfaces.IUsuarioService;
-import com.proyecto.trabajoya.services.implement.UsuarioServiceImpl;
 
 @Controller 
 @RequestMapping ("/usuarios")
@@ -28,7 +24,7 @@ public class UsuarioController {
 
     @GetMapping 
     public String verUsuarios(Model model) {
-        model.addAttribute("usuarios", new Usuario());
+        model.addAttribute("usuario", new Usuario());
         return "usuarios";
     }
 

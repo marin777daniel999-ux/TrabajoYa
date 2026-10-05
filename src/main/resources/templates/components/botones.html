@@ -1,0 +1,11 @@
+<!DOCTYPE html>
+<html xmlns="http://www.thymeleaf.org" lang="en">
+    <div th:fragment="botones" class="botonera-crud">
+        <button class="btn-crud btn-crear">Crear</button>
+        <button class="btn-crud btn-buscar" formnovalidate>Buscar</button>
+        <button class="btn-crud btn-modificar">Modificar</button>
+        <button class="btn-crud btn-eliminar" formnovalidate
+            onclick="return confirm('¿Está seguro de eliminar el registro?');">Eliminar</button>
+        <button type="submit" name="accion" value="listar" class="btn-crud btn-listar" formnovalidate>Listar</button>
+    </div>
+</html>

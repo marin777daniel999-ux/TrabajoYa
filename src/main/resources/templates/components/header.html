@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html xmlns="http://www.thymeleaf.org" lang="en">
+    <header th:fragment="header">
+        <div class="contenedor">
+    <div id="marca">
+        <a th:href="@{/}">
+            <h1>TrabajoYa</h1> 
+        </a>              
+    </div>                
+    <nav>
+        <ul>
+            <li><a th:href="@{/usuarios}">usuario</a> </li>
+            <li><a th:href="@{/servicios}">servicios</a> </li>  
+        </ul>
+    </nav>                
+</div>
+    </header>
+</html>

@@ -3,7 +3,54 @@
 <head th:replace="~{components/encabezado::encabezado}">
 </head>
 <body>
-    <h1>usuarios....</h1>
+    <header th:replace="~{components/header :: header}"></header>
+
+    <section>
+        <div class="contenedor">
+            <article>
+                <h1>Gestion de Usuarios</h1>
+                <form>
+                    <div class="grupo-campo">
+                        <label>Nombres</label>
+                        <input type="text"> 
+                    </div>
+
+                    <div class="grupo-campo">
+                        <label>Apellidos</label>
+                        <input type="text"> 
+                    </div>
+
+                    <div class="grupo-campo">
+                        <label>Documento</label>
+                        <input type="text"> 
+                    </div>
+
+                    <div class="grupo-campo">
+                        <label>Correo</label>
+                        <input type="text"> 
+                    </div>
+
+                    <div class="grupo-campo">
+                        <label>Celular</label>
+                        <input type="text"> 
+                    </div>
+
+                    <div class="grupo-campo">
+                        <label>Contraseña</label>
+                        <input type="password"> 
+                    </div>
+
+                    <div class="grupo-campo">
+                        <label>Nickname</label>
+                        <input type="text" placeholder="@"> 
+                    </div>
+
+                    <div th:replace="~{components/botones :: botones}"></div>
+                </form>
+            </article>
+        </div>
+    </section>
+
 
     <footer th:replace="~{components/footer :: footer}"></footer>
 </body>

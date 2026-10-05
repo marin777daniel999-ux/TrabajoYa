@@ -11,7 +11,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import com.proyecto.trabajoya.models.Contrato;
-import com.proyecto.trabajoya.repository.ContratoRepository;
 import com.proyecto.trabajoya.services.Interfaces.IContratoService;
 import com.proyecto.trabajoya.services.Interfaces.IUsuarioService;
 

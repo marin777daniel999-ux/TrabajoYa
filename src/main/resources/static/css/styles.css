@@ -1,0 +1,270 @@
+* {
+    box-sizing: border-box;
+}
+
+body{
+    font: 15px Arial, Helvetica, sans-serif;
+    padding: 0;
+    margin: 0;
+    background-color: #f4f4f4;
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+}
+.contenedor{
+    width: 95%;
+    margin: auto;
+    overflow: hidden;
+}
+ul{
+    margin: 0;
+    padding: 0;
+    list-style: none;
+}
+header{
+    background-color: #1293d4;
+    color: #fff;
+    padding: 20px 0;
+    min-height: 70px;
+    border-bottom: 5px solid #107db5;
+}
+header #marca{
+    float: left;
+}
+
+header #marca h1{
+    margin: 0;
+}
+header nav{
+    float: right;
+    margin-top: 10px;
+}
+header li{
+    display: inline-block;
+    padding: 0 15px;
+}
+header a{
+    color: #fff;
+    text-decoration: none;
+    text-transform: uppercase;
+    font-size: 14px;
+    transition: all 0.3s ease;
+}
+header a:hover{
+    color: #1d3b4b;
+    font-weight: bold;
+}
+section{
+    padding: 30px 0;
+    flex: 1;
+}
+
+article h1{
+    color:#1293d4;
+    margin-top: 0;
+}
+
+.formulario-crud{
+    background: #fff;
+    padding: 25px;
+    border-radius: 6px;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.08);
+}
+.grupo-campo{
+    margin-bottom: 15px;
+}
+.grupo-campo label{
+    display: block;
+    margin-bottom: 5px;
+    font-weight: bold;
+    color: #333;
+}
+
+.grupo-campo input, .grupo-campo select{
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    font-size: 14px;
+}
+
+.botonera-crud{
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+    margin-top: 25px;
+}
+.btn-crud{
+    flex: 1;
+    min-width: 120px;
+    padding: 12px;
+    font-size: 14px;
+    font-weight: bold;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    text-transform: uppercase;
+    transition: background 0.2s;
+    text-align: center;
+}
+.btn-crear{
+    background-color: #2eb85c;
+}
+.btn-crear:hover{
+    background-color: #228b44;
+}
+
+.btn-buscar{
+    background-color: #1293d4;
+}
+.btn-buscar:hover{
+    background-color: #0e72a5;
+}
+
+.btn-modificar{
+    background-color: #f9b115;
+}
+.btn-modificar:hover{
+    background-color: #d8960f;
+}
+
+.btn-eliminar{
+    background-color: #e55353;
+}
+.btn-eliminar:hover{
+    background-color: #c43d3d;
+}
+
+.btn-listar{
+    background-color: #b5f353;
+}
+.btn-listar:hover{
+    background-color: #7FAA3A;
+}
+footer{
+    padding: 20px 0;
+    color: #fff;
+    background-color: #1293d4;
+    text-align: center;
+    width: 100%;
+    height: 60px;
+    margin-top: auto;
+}
+footer p{
+    margin: 0;
+}
+
+.alerta-global{
+    padding: 15px;
+    margin-bottom: 20px;
+    border-radius: 4px;
+    font-weight: bold;
+}
+.alerta-exito{
+    background-color: #e2f0d9;
+    color: #385723;
+    border: 1px solid #bcd6ac;
+}
+
+.alerta-error{
+    background-color: #f8d7da;
+    color: #842029;
+    border: 1px solid #f5c2c7;
+}
+
+/* Contenedor blanco con sombra para envolver la tabla */
+/* ==========================================================================
+   SECCIÓN DE REPORTES Y TABLAS (CORREGIDO PARA ADQUIRIR MÁXIMA PRIORIDAD)
+   ========================================================================== */
+
+/* Contenedor blanco con sombra para envolver la tabla */
+div.contenedor-reporte-tabla {
+    background: #ffffff !important;
+    padding: 25px !important;
+    border-radius: 6px !important;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.08) !important;
+    margin-top: 20px !important;
+    display: block !important;
+    overflow-x: auto; /* Permite scroll si la pantalla es muy chica */
+}
+
+/* Estilos base de la Tabla */
+table.tabla-reporte {
+    width: 100% !important;
+    border-collapse: collapse !important;
+    font-size: 14px !important;
+    margin: 0 !important;
+    padding: 0 !important;
+}
+
+/* Fila de la cabecera (Azul destacado) */
+table.tabla-reporte tr.cabecera-tabla {
+    background-color: #1293d4 !important;
+    color: #ffffff !important;
+}
+
+/* Forzamos que los textos de la cabecera sean blancos y en mayúscula */
+table.tabla-reporte tr.cabecera-tabla th {
+    background-color: #1293d4 !important;
+    color: #ffffff !important;
+    text-transform: uppercase !important;
+    font-weight: bold !important;
+    padding: 12px !important;
+    text-align: left !important;
+    border: none !important;
+}
+
+/* Celdas de datos comunes dentro de las filas del reporte */
+table.tabla-reporte tr.fila-datos td {
+    padding: 12px !important;
+    text-align: left !important;
+    color: #333333 !important;
+    background: transparent !important;
+}
+
+/* Filas de datos con sutil línea de separación inferior */
+table.tabla-reporte tr.fila-datos {
+    border-bottom: 1px solid #e0e0e0 !important;
+    background-color: #ffffff !important;
+}
+
+/* Estilo estricto para la columna destacada del Documento */
+table.tabla-reporte tr.fila-datos td.columna-destacada {
+    font-weight: bold !important;
+    color: #1293d4 !important;
+}
+
+/* Celda informativa en caso de que no haya registros en el choose */
+table.tabla-reporte td.tabla-vacia {
+    text-align: center !important;
+    color: #999999 !important;
+    padding: 30px !important;
+    font-style: italic !important;
+}
+
+/* Contenedor del botón inferior */
+div.contenedor-boton-regresar {
+    margin-top: 25px !important;
+    display: block !important;
+}
+
+/* El botón estilizado para volver al CRUD */
+a.btn-regresar {
+    background-color: #1d3b4b !important;
+    color: #ffffff !important;
+    text-decoration: none !important;
+    padding: 12px 20px !important;
+    font-weight: bold !important;
+    border-radius: 4px !important;
+    text-transform: uppercase !important;
+    font-size: 13px !important;
+    display: inline-block !important;
+    transition: background-color 0.3s ease !important;
+}
+
+/* Efecto hover interactivo para el botón */
+a.btn-regresar:hover {
+    background-color: #1293d4 !important;
+    color: #ffffff !important;
+}

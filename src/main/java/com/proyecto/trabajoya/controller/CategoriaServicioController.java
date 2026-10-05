@@ -11,7 +11,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import com.proyecto.trabajoya.models.CategoriaServicio;
-import com.proyecto.trabajoya.repository.CategoriaServicioRepository;
 import com.proyecto.trabajoya.services.Interfaces.ICategoriaServicioService;
 import com.proyecto.trabajoya.services.Interfaces.IServicioService;
 
