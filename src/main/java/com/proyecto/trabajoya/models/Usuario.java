@@ -2,57 +2,91 @@ package com.proyecto.trabajoya.models;
 
 import java.util.List;
 
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
+import jakarta.validation.constraints.Email;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Size;
 
 @Entity
 @Table(name = "usuarios")
 public class Usuario {
     
     @Id
-    @GeneratedValue (strategy = GenerationType.IDENTITY)
-    @Column (name = "id_usuario")
-    private int idUsuario;
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id_usuario")
+    private Integer idUsuario;
 
-    @Column (nullable = false, unique = false, length = 50)
+    @NotBlank(message = "Los nombres son obligatorios")
+    @Size(max = 50, message = "Los nombres no pueden superar los 50 caracteres")
+    @Column(nullable = false, length = 50)
     private String nombres;
 
-    @Column (nullable = false, unique = false, length = 50)
+    @NotBlank(message = "Los apellidos son obligatorios")
+    @Size(max = 50, message = "Los apellidos no pueden superar los 50 caracteres")
+    @Column(nullable = false, length = 50)
     private String apellidos;
 
-    @Column (nullable = false, unique = true, length = 12)
+    @NotBlank(message = "El documento es obligatorio")
+    @Size(max = 15, message = "El documento no puede superar los 15 caracteres")
+    @Column(nullable = false, unique = true, length = 15)
     private String documento;
 
-    @Column (nullable = false, unique = true, length = 50)
+    @NotBlank(message = "El correo es obligatorio")
+    @Email(message = "Debe proporcionar un correo electrónico válido")
+    @Column(nullable = false, unique = true, length = 100)
     private String correo;
 
-    @Column (nullable = false, unique = true, length = 10)
+    @NotBlank(message = "El celular es obligatorio")
+    @Size(min = 10, max = 15, message = "El celular debe tener entre 10 y 15 dígitos")
+    @Column(nullable = false, unique = true, length = 15)
     private String celular;
 
-    @Column (nullable = false, unique = false, length = 255)
+    @NotBlank(message = "La contraseña es obligatoria")
+    @Column(nullable = false, length = 255)
     private String contraseña;
 
-    @Column (nullable = false, unique = true, length = 10)
+    @NotBlank(message = "El apodo o nickname es obligatorio")
+    @Size(max = 20, message = "El nickName no puede superar los 20 caracteres")
+    @Column(nullable = false, unique = true, length = 20)
     private String nickName;
 
-    //servicio
-    @OneToMany(mappedBy = "usuario")
+    // Rol para diferenciar entre cliente y prestador de servicios
+    @Enumerated(EnumType.STRING)
+    @Column(nullable = false, length = 20)
+    private Rol rol; // CLIENTE, PRESTADOR
+
+    // Servicios publicados por el usuario
+    @OneToMany(mappedBy = "usuario", cascade = CascadeType.ALL)
     private List<Servicio> servicios;
 
-    //contrato
-    @OneToMany(mappedBy = "usuario")
-    private List<Contrato> contrato;
+    // Contratos asociados al usuario
+    @OneToMany(mappedBy = "cliente", cascade = CascadeType.ALL)
+    private List<Contrato> contratosComoCliente;
+
+    @OneToMany(mappedBy = "prestador", cascade = CascadeType.ALL)
+    private List<Contrato> contratosComoPrestador;
+
+    // para los roles del sistema
+    public enum Rol {
+        CLIENTE,
+        PRESTADOR,
+        ADMIN
+    }
 
     public Usuario() {
     }
 
     public Usuario(String nombres, String apellidos, String documento, String correo, String celular, String contraseña,
-            String nickName, List<Servicio> servicios, List<Contrato> contrato) {
+            String nickName, Rol rol) {
         this.nombres = nombres;
         this.apellidos = apellidos;
         this.documento = documento;
@@ -60,29 +94,15 @@ public class Usuario {
         this.celular = celular;
         this.contraseña = contraseña;
         this.nickName = nickName;
-        this.servicios = servicios;
-        this.contrato = contrato;
+        this.rol = rol;
     }
 
-    public Usuario(int idUsuario, String nombres, String apellidos, String documento, String correo, String celular,
-            String contraseña, String nickName, List<Servicio> servicios, List<Contrato> contrato) {
-        this.idUsuario = idUsuario;
-        this.nombres = nombres;
-        this.apellidos = apellidos;
-        this.documento = documento;
-        this.correo = correo;
-        this.celular = celular;
-        this.contraseña = contraseña;
-        this.nickName = nickName;
-        this.servicios = servicios;
-        this.contrato= contrato;
-    }
-
-    public int getIdUsuario() {
+    // Getters y Setters
+    public Integer getIdUsuario() {
         return idUsuario;
     }
 
-    public void setIdUsuario(int idUsuario) {
+    public void setIdUsuario(Integer idUsuario) {
         this.idUsuario = idUsuario;
     }
 
@@ -142,6 +162,14 @@ public class Usuario {
         this.nickName = nickName;
     }
 
+    public Rol getRol() {
+        return rol;
+    }
+
+    public void setRol(Rol rol) {
+        this.rol = rol;
+    }
+
     public List<Servicio> getServicios() {
         return servicios;
     }
@@ -150,11 +178,19 @@ public class Usuario {
         this.servicios = servicios;
     }
 
-    public List<Contrato> getContrato() {
-        return contrato;
+    public List<Contrato> getContratosComoCliente() {
+        return contratosComoCliente;
     }
 
-    public void setContrato(List<Contrato> contrato) {
-        this.contrato = contrato;
+    public void setContratosComoCliente(List<Contrato> contratosComoCliente) {
+        this.contratosComoCliente = contratosComoCliente;
+    }
+
+    public List<Contrato> getContratosComoPrestador() {
+        return contratosComoPrestador;
+    }
+
+    public void setContratosComoPrestador(List<Contrato> contratosComoPrestador) {
+        this.contratosComoPrestador = contratosComoPrestador;
     }
 }

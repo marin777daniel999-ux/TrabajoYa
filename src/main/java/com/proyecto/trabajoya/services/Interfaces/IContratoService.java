@@ -11,5 +11,6 @@ public interface IContratoService {
     boolean modificarContrato(Contrato contrato);
     boolean removerContrato(Integer id);
     List<Contrato> listarContratos();
-    List<Contrato> listarUsuarioPorContrato(Integer idUsuario);
+    List<Contrato> listarPorCliente(Integer idCliente);
+    List<Contrato> listarPorPrestador(Integer idPrestador);
 }

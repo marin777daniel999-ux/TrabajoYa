@@ -29,7 +29,8 @@ public class CalificacionServiceImpl implements ICalificacionService {
 
     @Override
     public Calificacion buscarPorCodigo(String codigo) {
-        return calificacionRepository.findByCodigo(codigo);
+    
+        return calificacionRepository.findByCodigo(codigo).orElse(null);
     }
 
     @Override
@@ -40,7 +41,7 @@ public class CalificacionServiceImpl implements ICalificacionService {
 
     @Override
     public boolean removerCalificacion(Integer id) {
-        calificacionRepository.deleteById(id);;
+        calificacionRepository.deleteById(id);
         return true;
     }
 
@@ -48,5 +49,4 @@ public class CalificacionServiceImpl implements ICalificacionService {
     public List<Calificacion> listarCalifiaciones() {
         return calificacionRepository.findAll();
     }
-
 }

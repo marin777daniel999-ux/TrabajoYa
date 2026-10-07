@@ -29,7 +29,7 @@ public class ServicioServiceImpl implements IServicioService {
 
     @Override
     public Servicio buscarPorCodigo(String codigo) {
-        return servicioRepository.findByCodigo(codigo);
+        return servicioRepository.findByCodigo(codigo).orElse(null);
     }
 
     @Override
@@ -51,7 +51,7 @@ public class ServicioServiceImpl implements IServicioService {
 
     @Override
     public List<Servicio> listarContratoPorServicio(Integer idContrato) {
-        return servicioRepository.findByContratoIdContrato(idContrato);
+        return servicioRepository.findByContratos_IdContrato(idContrato);
     }
 
     @Override

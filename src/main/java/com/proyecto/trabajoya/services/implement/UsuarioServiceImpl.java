@@ -29,7 +29,8 @@ public class UsuarioServiceImpl implements IUsuarioService {
 
     @Override
     public Usuario buscarPorDocumento(String documento) {
-        return usuarioRepository.findByDocumento(documento);
+        
+        return usuarioRepository.findByDocumento(documento).orElse(null);
     }
 
     @Override

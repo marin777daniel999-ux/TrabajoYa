@@ -16,13 +16,16 @@ import com.proyecto.trabajoya.services.Interfaces.IServicioService;
 import com.proyecto.trabajoya.services.Interfaces.IUsuarioService;
 
 @Controller 
-@RequestMapping ("/servicios")
+@RequestMapping("/servicios")
 public class ServicioController {
+    
     private final IServicioService servicioService;
     private final IContratoService contratoService;
     private final IUsuarioService usuarioService;
     
-    public ServicioController(IServicioService servicioService, IContratoService contratoService, IUsuarioService usuarioService) {
+    public ServicioController(IServicioService servicioService, 
+                              IContratoService contratoService, 
+                              IUsuarioService usuarioService) {
         this.servicioService = servicioService;
         this.contratoService = contratoService;
         this.usuarioService = usuarioService;
@@ -30,63 +33,86 @@ public class ServicioController {
 
     @GetMapping 
     public String verServicios(Model model) {
-        model.addAttribute("servicios", new Servicio());
+        model.addAttribute("servicio", new Servicio());
         model.addAttribute("listaContratos", contratoService.listarContratos());
+        model.addAttribute("listaUsuarios", usuarioService.listarUsuarios());
         return "servicios";
     }
 
     @PostMapping
-    public String procesarAccion(@RequestParam (required = false) String accion,
-                                 @RequestParam (required = false) String codigo,
+    public String procesarAccion(@RequestParam(required = false) String accion,
+                                 @RequestParam(required = false) String codigo,
                                  @ModelAttribute Servicio servicio,
                                  Model model) {
-        String mensaje="";
-        String tipoMensaje="exito";
+        String mensaje = "";
+        String tipoMensaje = "exito";
+
         try {
-            if ("crear".equals(accion)) {
+            String accionStr = (accion != null) ? accion : "";
+            
+            if ("crear".equals(accionStr)) {
                 servicioService.registrarServicio(servicio);
-                mensaje="servicio registrado";
+                mensaje = "Servicio registrado exitosamente.";
                 model.addAttribute("servicio", new Servicio());
-            }else if("modificar".equals(accion)){
+                
+            } else if ("modificar".equals(accionStr)) {
                 servicioService.modificarServicio(servicio);
-                mensaje="servicio modificado";
+                mensaje = "Servicio modificado exitosamente.";
                 model.addAttribute("servicio", new Servicio());
-            }else if("eliminar".equals(accion)){
-                servicioService.removerServicio(servicio.getIdServicio());
-                mensaje="servicio eliminado";
-                model.addAttribute("servicio", new Servicio());
-            }else if("buscar".equals(accion)){
-                Servicio encontrado = servicioService.buscarPorCodigo(codigo);
-                if(encontrado != null){
-                    model.addAttribute("encargado", encontrado);
-                    mensaje="servicio encontrado";
-                }else{
-                    mensaje="No se encontró servicio con codigo: "+codigo;
-                    tipoMensaje="error";
-                    model.addAttribute("servicio", servicio);
+                
+            } else if ("eliminar".equals(accionStr)) {
+                if (servicio.getIdServicio() != null) {
+                    servicioService.removerServicio(servicio.getIdServicio());
+                    mensaje = "Servicio eliminado exitosamente.";
+                } else {
+                    mensaje = "Error: ID de servicio no especificado para eliminar.";
+                    tipoMensaje = "error";
                 }
-            }else if("listar".equals(accion)){
-                List<Servicio> lista=servicioService.listarServicios();
+                model.addAttribute("servicio", new Servicio());
+                
+            } else if ("buscar".equals(accionStr)) {
+                Servicio encontrado = servicioService.buscarPorCodigo(codigo);
+                if (encontrado != null) {
+                    model.addAttribute("encargado", encontrado);
+                    mensaje = "Servicio encontrado.";
+                } else {
+                    mensaje = "No se encontró ningún servicio con el código: " + codigo;
+                    tipoMensaje = "error";
+                }
+                model.addAttribute("servicio", servicio);
+                
+            } else if ("listar".equals(accionStr)) {
+                List<Servicio> lista = servicioService.listarServicios();
                 model.addAttribute("listaServicios", lista);
                 return "list/listaServicios";
+                
+            } else {
+                mensaje = "Acción no reconocida.";
+                tipoMensaje = "error";
+                model.addAttribute("servicio", servicio);
             }
+            
         } catch (Exception e) {
-            tipoMensaje="error";
+            tipoMensaje = "error";
             String errStr = e.getMessage() != null ? e.getMessage().toLowerCase() : "";
-            if(errStr.contains("duplicate")){
-                if(errStr.contains("codigo")){
-                    mensaje="Error, ya existe servicio con el codigo:"+servicio.getCodigo();
+            
+            if (errStr.contains("duplicate") || errStr.contains("uk") || errStr.contains("constraint")) {
+                if (errStr.contains("codigo")) {
+                    mensaje = "Error: Ya existe un servicio registrado con el código: " + servicio.getCodigo();
+                } else {
+                    mensaje = "Error: Ya existe un registro con datos duplicados en el sistema.";
                 }
-            }else{
-                mensaje="Error, "+e.getMessage();
+            } else {
+                mensaje = "Error inesperado: " + e.getMessage();
             }
             model.addAttribute("servicio", servicio);
         }
+
         model.addAttribute("listaContratos", contratoService.listarContratos());
-        model.addAttribute("listaUsuarios",usuarioService.listarUsuarios());
-        model.addAttribute("mensaje",mensaje);
-        model.addAttribute("tipoMensaje",tipoMensaje);
+        model.addAttribute("listaUsuarios", usuarioService.listarUsuarios());
+        model.addAttribute("mensaje", mensaje);
+        model.addAttribute("tipoMensaje", tipoMensaje);
+        
         return "servicios";
     }
-
 }

@@ -29,7 +29,8 @@ public class CategoriaServicioServiceImpl implements ICategoriaServicioService {
 
     @Override
     public CategoriaServicio buscarPorCodigo(String codigo) {
-        return categoriaServicioRepository.findByCodigo(codigo);
+       
+        return categoriaServicioRepository.findByCodigo(codigo).orElse(null);
     }
 
     @Override
@@ -51,7 +52,7 @@ public class CategoriaServicioServiceImpl implements ICategoriaServicioService {
 
     @Override
     public List<CategoriaServicio> listarServicioPorCategoria(Integer idServicio) {
-        return categoriaServicioRepository.findByServicioIdServicio(idServicio);
+        
+        return categoriaServicioRepository.findByServiciosIdServicio(idServicio);
     }
-
 }

@@ -1,7 +1,10 @@
 package com.proyecto.trabajoya.models;
 
-import java.sql.Time;
+import java.math.BigDecimal;
 import java.time.LocalDate;
+import java.time.LocalTime;
+
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -11,56 +14,77 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
+import jakarta.validation.constraints.DecimalMin;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Size;
 
 @Entity
-@Table (name = "contrato")
+@Table(name = "contratos")
 public class Contrato {
     
     @Id
-    @GeneratedValue (strategy = GenerationType.IDENTITY)
-    @Column (name = "id_contrato")
-    private int idContrato;
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id_contrato")
+    private Integer idContrato;
 
-    @Column (nullable = false, unique = true, length = 6)
+    @NotBlank(message = "El código del contrato es obligatorio")
+    @Size(max = 10, message = "El código no puede superar los 10 caracteres")
+    @Column(nullable = false, unique = true, length = 10)
     private String codigo;
 
-    @Column (nullable = false)
-    private Time horaContrato;
+    @NotNull(message = "La hora del contrato es obligatoria")
+    @Column(nullable = false)
+    private LocalTime horaContrato;
 
-    @Column (nullable = false, length = 50)
+    @NotBlank(message = "El lugar es obligatorio")
+    @Size(max = 100, message = "El lugar no puede superar los 100 caracteres")
+    @Column(nullable = false, length = 100)
     private String lugar;
 
-    @Column (nullable = false)
-    private double precioNegociable;
+    @NotNull(message = "El precio negociable es obligatorio")
+    @DecimalMin(value = "0.0", inclusive = false, message = "El precio debe ser mayor a cero")
+    @Column(nullable = false, precision = 10, scale = 2)
+    private BigDecimal precioNegociable;
 
-    @Column (nullable = false)
+    @NotNull(message = "La fecha del contrato es obligatoria")
+    @Column(nullable = false)
     private LocalDate fechaContrato;
 
-    @Column (nullable = false)
+    @NotNull(message = "La fecha de fin es obligatoria")
+    @Column(nullable = false)
     private LocalDate fechaFin;
 
-    @Column (nullable = false)
-    private Boolean estado;
+    @Column(nullable = false)
+    private Boolean estado = true; // True: Activo/En curso, False: Finalizado
 
-    // servicio (at)
+    // Relación con el Servicio contratado
+    @NotNull(message = "El servicio es obligatorio")
     @ManyToOne
-    @JoinColumn(name = "idTrabajo", nullable = false)
+    @JoinColumn(name = "id_servicio", nullable = false)
     private Servicio servicio;
 
-    //usuario (at)
+    // Relación con el Cliente (Usuario que contrata)
+    @NotNull(message = "El cliente es obligatorio")
     @ManyToOne
-    @JoinColumn(name = "idUsuario", nullable = false)
-    private Usuario usuario;
+    @JoinColumn(name = "id_cliente", nullable = false)
+    private Usuario cliente;
 
-    // calificacion
-    @OneToOne(mappedBy = "contrato")
+    // Relación con el Prestador (Trabajador que realiza el servicio)
+    @NotNull(message = "El prestador es obligatorio")
+    @ManyToOne
+    @JoinColumn(name = "id_prestador", nullable = false)
+    private Usuario prestador;
+
+    // Calificación asociada al contrato 
+    @OneToOne(mappedBy = "contrato", cascade = CascadeType.ALL)
     private Calificacion calificacion;
 
     public Contrato() {
     }
 
-    public Contrato(String codigo, Time horaContrato, String lugar, double precioNegociable, LocalDate fechaContrato,
-            LocalDate fechaFin, Boolean estado, Servicio servicio, Usuario usuario) {
+    public Contrato(String codigo, LocalTime horaContrato, String lugar, BigDecimal precioNegociable, 
+            LocalDate fechaContrato, LocalDate fechaFin, Boolean estado, Servicio servicio, Usuario cliente, Usuario prestador) {
         this.codigo = codigo;
         this.horaContrato = horaContrato;
         this.lugar = lugar;
@@ -69,28 +93,16 @@ public class Contrato {
         this.fechaFin = fechaFin;
         this.estado = estado;
         this.servicio = servicio;
-        this.usuario = usuario;
+        this.cliente = cliente;
+        this.prestador = prestador;
     }
 
-    public Contrato(int idContrato, String codigo, Time horaContrato, String lugar, double precioNegociable,
-            LocalDate fechaContrato, LocalDate fechaFin, Boolean estado, Servicio servicio, Usuario usuario) {
-        this.idContrato = idContrato;
-        this.codigo = codigo;
-        this.horaContrato = horaContrato;
-        this.lugar = lugar;
-        this.precioNegociable = precioNegociable;
-        this.fechaContrato = fechaContrato;
-        this.fechaFin = fechaFin;
-        this.estado = estado;
-        this.servicio = servicio;
-        this.usuario = usuario;
-    }
 
-    public int getIdContrato() {
+    public Integer getIdContrato() {
         return idContrato;
     }
 
-    public void setIdContrato(int idContrato) {
+    public void setIdContrato(Integer idContrato) {
         this.idContrato = idContrato;
     }
 
@@ -102,11 +114,11 @@ public class Contrato {
         this.codigo = codigo;
     }
 
-    public Time getHoraContrato() {
+    public LocalTime getHoraContrato() {
         return horaContrato;
     }
 
-    public void setHoraContrato(Time horaContrato) {
+    public void setHoraContrato(LocalTime horaContrato) {
         this.horaContrato = horaContrato;
     }
 
@@ -118,11 +130,11 @@ public class Contrato {
         this.lugar = lugar;
     }
 
-    public double getPrecioNegociable() {
+    public BigDecimal getPrecioNegociable() {
         return precioNegociable;
     }
 
-    public void setPrecioNegociable(double precioNegociable) {
+    public void setPrecioNegociable(BigDecimal precioNegociable) {
         this.precioNegociable = precioNegociable;
     }
 
@@ -158,12 +170,20 @@ public class Contrato {
         this.servicio = servicio;
     }
 
-    public Usuario getUsuario() {
-        return usuario;
+    public Usuario getCliente() {
+        return cliente;
     }
 
-    public void setUsuario(Usuario usuario) {
-        this.usuario = usuario;
+    public void setCliente(Usuario cliente) {
+        this.cliente = cliente;
+    }
+
+    public Usuario getPrestador() {
+        return prestador;
+    }
+
+    public void setPrestador(Usuario prestador) {
+        this.prestador = prestador;
     }
 
     public Calificacion getCalificacion() {

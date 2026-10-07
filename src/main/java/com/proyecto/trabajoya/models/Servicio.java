@@ -1,7 +1,10 @@
 package com.proyecto.trabajoya.models;
 
-import java.util.Date;
+import java.math.BigDecimal;
+import java.time.LocalDate;
 import java.util.List;
+
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -11,77 +14,78 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
+import jakarta.validation.constraints.DecimalMin;
+import jakarta.validation.constraints.FutureOrPresent;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Size;
+
 
 @Entity
-@Table (name = "servicios")
+@Table(name = "servicios")
 public class Servicio {
     
     @Id
-    @GeneratedValue (strategy = GenerationType.IDENTITY)
-    @Column (name = "id_servicio")
-    private int idServicio;
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id_servicio")
+    private Integer idServicio;
 
-    @Column (nullable = false, length = 6)
+    @NotBlank(message = "El código del servicio es obligatorio")
+    @Size(max = 10, message = "El código no puede superar los 10 caracteres")
+    @Column(nullable = false, unique = true, length = 10)
     private String codigo;
 
-    @Column (nullable = false, length = 50)
+    @NotBlank(message = "El nombre del servicio es obligatorio")
+    @Size(max = 50, message = "El nombre no puede superar los 50 caracteres")
+    @Column(nullable = false, length = 50)
     private String nombre;
 
-    @Column(nullable = false, length = 200)
+    @NotBlank(message = "La descripción es obligatoria")
+    @Size(max = 500, message = "La descripción no puede superar los 500 caracteres")
+    @Column(nullable = false, length = 500)
     private String descripcion;
 
-    @Column (nullable = false)
+    @NotNull(message = "Debe indicar si cuenta con experiencia")
+    @Column(nullable = false)
     private boolean experiencia;
 
-    @Column (nullable = false, length = 255)
-    private String evidencia;
+    @Column(length = 255)
+    private String evidencia; // URL o ruta de la foto/evidencia
 
-    @Column (nullable = false)
-    private double precioInicial;
+    @NotNull(message = "El precio inicial es obligatorio")
+    @DecimalMin(value = "0.0", inclusive = false, message = "El precio inicial debe ser mayor a cero")
+    @Column(nullable = false, precision = 10, scale = 2)
+    private BigDecimal precioInicial;
 
-    @Column (nullable = false)
-    private boolean estado;
+    @Column(nullable = false)
+    private boolean estado = true; // Por defecto activo
 
-    @Column (nullable = false)
-    private Date fechaExpiracion;
+    @NotNull(message = "La fecha de expiración es obligatoria")
+    @FutureOrPresent(message = "La fecha de expiración debe ser actual o futura")
+    @Column(nullable = false)
+    private LocalDate fechaExpiracion;
 
-    //Usuario (at)
+    // Relación con el Usuario (Prestador que ofrece el servicio)
+    @NotNull(message = "El usuario es obligatorio")
     @ManyToOne
-    @JoinColumn(name = "idUsuario", nullable = false)
+    @JoinColumn(name = "id_usuario", nullable = false)
     private Usuario usuario;
 
-    //CategoriaServicios (at)
+    // Relación con la Categoría del Servicio
+    @NotNull(message = "La categoría es obligatoria")
     @ManyToOne
-    @JoinColumn(name = "idCategoria", nullable = false)
+    @JoinColumn(name = "id_categoria", nullable = false)
     private CategoriaServicio categoria;
 
-    // Relación Uno a Muchos con Contrato
-    @OneToMany(mappedBy = "servicio")
-    private List<Contrato> contrato;
+    // Relación Uno a Muchos con Contratos
+    @OneToMany(mappedBy = "servicio", cascade = CascadeType.ALL)
+    private List<Contrato> contratos;
 
     public Servicio() {
     }
 
-    public Servicio(int idServicio, String codigo, String nombre, String descripcion, boolean experiencia,
-            String evidencia, double precioInicial, boolean estado, Date fechaExpiracion, Usuario usuario,
-            CategoriaServicio categoria, List<Contrato> contrato) {
-        this.idServicio = idServicio;
-        this.codigo = codigo;
-        this.nombre = nombre;
-        this.descripcion = descripcion;
-        this.experiencia = experiencia;
-        this.evidencia = evidencia;
-        this.precioInicial = precioInicial;
-        this.estado = estado;
-        this.fechaExpiracion = fechaExpiracion;
-        this.usuario = usuario;
-        this.categoria = categoria;
-        this.contrato = contrato;
-    }
-
     public Servicio(String codigo, String nombre, String descripcion, boolean experiencia, String evidencia,
-            double precioInicial, boolean estado, Date fechaExpiracion, Usuario usuario, CategoriaServicio categoria,
-            List<Contrato> contrato) {
+            BigDecimal precioInicial, boolean estado, LocalDate fechaExpiracion, Usuario usuario, CategoriaServicio categoria) {
         this.codigo = codigo;
         this.nombre = nombre;
         this.descripcion = descripcion;
@@ -92,14 +96,14 @@ public class Servicio {
         this.fechaExpiracion = fechaExpiracion;
         this.usuario = usuario;
         this.categoria = categoria;
-        this.contrato = contrato;
     }
 
-    public int getIdServicio() {
+    // Getters y Setters
+    public Integer getIdServicio() {
         return idServicio;
     }
 
-    public void setIdServicio(int idServicio) {
+    public void setIdServicio(Integer idServicio) {
         this.idServicio = idServicio;
     }
 
@@ -143,11 +147,11 @@ public class Servicio {
         this.evidencia = evidencia;
     }
 
-    public double getPrecioInicial() {
+    public BigDecimal getPrecioInicial() {
         return precioInicial;
     }
 
-    public void setPrecioInicial(double precioInicial) {
+    public void setPrecioInicial(BigDecimal precioInicial) {
         this.precioInicial = precioInicial;
     }
 
@@ -159,11 +163,11 @@ public class Servicio {
         this.estado = estado;
     }
 
-    public Date getFechaExpiracion() {
+    public LocalDate getFechaExpiracion() {
         return fechaExpiracion;
     }
 
-    public void setFechaExpiracion(Date fechaExpiracion) {
+    public void setFechaExpiracion(LocalDate fechaExpiracion) {
         this.fechaExpiracion = fechaExpiracion;
     }
 
@@ -183,11 +187,11 @@ public class Servicio {
         this.categoria = categoria;
     }
 
-    public List<Contrato> getContrato() {
-        return contrato;
+    public List<Contrato> getContratos() {
+        return contratos;
     }
 
-    public void setContrato(List<Contrato> contrato) {
-        this.contrato = contrato;
+    public void setContratos(List<Contrato> contratos) {
+        this.contratos = contratos;
     }
 }

@@ -29,7 +29,8 @@ public class ContratoServiceImpl implements IContratoService {
 
     @Override
     public Contrato buscarPorCodigo(String codigo) {
-        return contratoRepository.findByCodigo(codigo);
+      
+        return contratoRepository.findByCodigo(codigo).orElse(null);
     }
 
     @Override
@@ -50,8 +51,12 @@ public class ContratoServiceImpl implements IContratoService {
     }
 
     @Override
-    public List<Contrato> listarUsuarioPorContrato(Integer idUsuario) {
-        return contratoRepository.findByUsuarioIdUsuario(idUsuario);
+    public List<Contrato> listarPorCliente(Integer idCliente) {
+        return contratoRepository.findByClienteIdUsuario(idCliente);
     }
 
+    @Override
+    public List<Contrato> listarPorPrestador(Integer idPrestador) {
+        return contratoRepository.findByPrestadorIdUsuario(idPrestador);
+    }
 }

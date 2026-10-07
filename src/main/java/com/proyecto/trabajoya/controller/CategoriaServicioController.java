@@ -15,74 +15,103 @@ import com.proyecto.trabajoya.services.Interfaces.ICategoriaServicioService;
 import com.proyecto.trabajoya.services.Interfaces.IServicioService;
 
 @Controller 
-@RequestMapping ("/categorias")
+@RequestMapping("/categorias")
 public class CategoriaServicioController {
+    
     private final ICategoriaServicioService categoriaServicioService;
     private final IServicioService servicioService;
 
-     public CategoriaServicioController(ICategoriaServicioService categoriaServicioService, IServicioService servicioService) {
+    public CategoriaServicioController(ICategoriaServicioService categoriaServicioService, 
+                                       IServicioService servicioService) {
         this.categoriaServicioService = categoriaServicioService;
         this.servicioService = servicioService;
     }
 
-     @GetMapping 
+    @GetMapping 
     public String verCategorias(Model model) {
-        model.addAttribute("categorias", new CategoriaServicio());
+        model.addAttribute("categoriaServicio", new CategoriaServicio());
         model.addAttribute("listaServicios", servicioService.listarServicios());
         return "categorias";
     }
 
     @PostMapping
-    public String procesarAccion(@RequestParam (required = false) String accion,
-                                 @RequestParam (required = false) String codigo,
+    public String procesarAccion(@RequestParam(required = false) String accion,
+                                 @RequestParam(required = false) String codigo,
                                  @ModelAttribute CategoriaServicio categoriaServicio,
                                  Model model) {
-        String mensaje="";
-        String tipoMensaje="exito";
+        String mensaje = "";
+        String tipoMensaje = "exito";
+
         try {
-            if ("crear".equals(accion)) {
-                categoriaServicioService.registrarCategoriaServicio(categoriaServicio);
-                mensaje="categoria registrada";
-                model.addAttribute("categoriaServicio", new CategoriaServicio());
-            }else if("modificar".equals(accion)){
-                categoriaServicioService.modificarCategoriaServicio(categoriaServicio);
-                mensaje="categoria modificada";
-                model.addAttribute("categoriaServicio", new CategoriaServicio());
-            }else if("eliminar".equals(accion)){
-                categoriaServicioService.removerCategoriaServicio(categoriaServicio.getIdCategoriaServicio());
-                mensaje="categoriao eliminada";
-                model.addAttribute("categoriaServicio", new CategoriaServicio());
-            }else if("buscar".equals(accion)){
-                CategoriaServicio encontrado = categoriaServicioService.buscarPorCodigo(codigo);
-                if(encontrado != null){
-                    model.addAttribute("encargado", encontrado);
-                    mensaje="categoria encontrada";
-                }else{
-                    mensaje="No se encontró categoriaServicio con codigo: "+codigo;
-                    tipoMensaje="error";
+            String accionStr = (accion != null) ? accion : "";
+            
+            switch (accionStr) {
+                case "crear":
+                    categoriaServicioService.registrarCategoriaServicio(categoriaServicio);
+                    mensaje = "Categoría registrada exitosamente.";
+                    model.addAttribute("categoriaServicio", new CategoriaServicio());
+                    break;
+
+                case "modificar":
+                    categoriaServicioService.modificarCategoriaServicio(categoriaServicio);
+                    mensaje = "Categoría modificada exitosamente.";
+                    model.addAttribute("categoriaServicio", new CategoriaServicio());
+                    break;
+
+                case "eliminar":
+                    if (categoriaServicio.getIdCategoriaServicio() != null) {
+                        categoriaServicioService.removerCategoriaServicio(categoriaServicio.getIdCategoriaServicio());
+                        mensaje = "Categoría eliminada exitosamente.";
+                    } else {
+                        mensaje = "Error: ID de categoría no especificado para eliminar.";
+                        tipoMensaje = "error";
+                    }
+                    model.addAttribute("categoriaServicio", new CategoriaServicio());
+                    break;
+
+                case "buscar":
+                    CategoriaServicio encontrado = categoriaServicioService.buscarPorCodigo(codigo);
+                    if (encontrado != null) {
+                        model.addAttribute("encargado", encontrado);
+                        mensaje = "Categoría encontrada.";
+                    } else {
+                        mensaje = "No se encontró ninguna categoría con el código: " + codigo;
+                        tipoMensaje = "error";
+                    }
                     model.addAttribute("categoriaServicio", categoriaServicio);
-                }
-            }else if("listar".equals(accion)){
-                List<CategoriaServicio> lista=categoriaServicioService.listarCategoriaServicios();
-                model.addAttribute("listaCategoriaServicios", lista);
-                return "list/listaCategoriaServicios";
+                    break;
+
+                case "listar":
+                    List<CategoriaServicio> lista = categoriaServicioService.listarCategoriaServicios();
+                    model.addAttribute("listaCategoriaServicios", lista);
+                    return "list/listaCategoriaServicios";
+
+                default:
+                    mensaje = "Acción no reconocida.";
+                    tipoMensaje = "error";
+                    model.addAttribute("categoriaServicio", categoriaServicio);
+                    break;
             }
         } catch (Exception e) {
-            tipoMensaje="error";
+            tipoMensaje = "error";
             String errStr = e.getMessage() != null ? e.getMessage().toLowerCase() : "";
-            if(errStr.contains("duplicate")){
-                if(errStr.contains("codigo")){
-                    mensaje="Error, ya existe categoria con el codigo:"+categoriaServicio.getCodigo();
+            
+            if (errStr.contains("duplicate") || errStr.contains("uk") || errStr.contains("constraint")) {
+                if (errStr.contains("codigo")) {
+                    mensaje = "Error: Ya existe una categoría registrada con el código: " + categoriaServicio.getCodigo();
+                } else {
+                    mensaje = "Error: Ya existe un registro con datos duplicados en el sistema.";
                 }
-            }else{
-                mensaje="Error, "+e.getMessage();
+            } else {
+                mensaje = "Error inesperado: " + e.getMessage();
             }
             model.addAttribute("categoriaServicio", categoriaServicio);
         }
-        model.addAttribute("listaServicios", servicioService.listarServicios());
-        model.addAttribute("mensaje",mensaje);
-        model.addAttribute("tipoMensaje",tipoMensaje);
-        return "categoriaServicios";
-    }
 
+        model.addAttribute("listaServicios", servicioService.listarServicios());
+        model.addAttribute("mensaje", mensaje);
+        model.addAttribute("tipoMensaje", tipoMensaje);
+        
+        return "categorias";
+    }
 }
